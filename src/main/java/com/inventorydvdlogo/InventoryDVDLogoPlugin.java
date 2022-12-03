@@ -30,19 +30,12 @@ public class InventoryDVDLogoPlugin extends Plugin {
 
     @Override
     protected void startUp() throws IllegalAccessException {
-        try {
-            Field overlaysField = OverlayManager.class.getDeclaredField("overlays");
-            overlaysField.setAccessible(true);
-
-            inventory = ((List<Overlay>) overlaysField.get(overlayManager)).stream()
-                    .filter(overlay ->
-                            overlay.getName().equals("RESIZABLE_VIEWPORT_BOTTOM_LINE_INVENTORY_PARENT")
-                    )
-                    .findFirst()
-                    .orElseThrow(() -> new IllegalStateException("STARTUP FAILED CANNOT FIND INVENTORY"));
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        }
+        // THIS ONE'S FOR YOU ADAM BABY <3
+        overlayManager.removeIf(o -> {
+                    if (o.getName().equals("RESIZABLE_VIEWPORT_BOTTOM_LINE_INVENTORY_PARENT"))
+                        inventory = o;
+                    return false;
+                });
         dvdLogo = new DVDLogo();
     }
 
